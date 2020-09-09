@@ -84,7 +84,8 @@ const handler = exports.handler = (() => {
       return filteredColumns.map(function (column) {
         return {
           name: formatPropertyName(column.columnName),
-          type: (0, _utilities.mapFlowType)(column.databaseType) + (column.nullable ? ' | null' : ''),
+          nullable: column.nullable,
+          type: (0, _utilities.mapFlowType)(column.databaseType),
           typeName: formatTypeName(column.tableName)
         };
       });

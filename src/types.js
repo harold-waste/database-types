@@ -20,6 +20,7 @@ export type ColumnType = {|
 
 export type TypePropertyType = {|
   +name: string,
+  +nullable: boolean,
   +type: string,
-  +typeName: string
+  +typeName: string,
 |};

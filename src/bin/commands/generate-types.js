@@ -105,8 +105,9 @@ export const handler = async (argv: ConfigurationType): Promise<void> => {
     return filteredColumns.map((column) => {
       return {
         name: formatPropertyName(column.columnName),
-        type: mapFlowType(column.databaseType) + (column.nullable ? ' | null' : ''),
-        typeName: formatTypeName(column.tableName)
+        nullable: column.nullable,
+        type: mapFlowType(column.databaseType),
+        typeName: formatTypeName(column.tableName),
       };
     });
   };

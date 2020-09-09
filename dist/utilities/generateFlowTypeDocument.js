@@ -19,7 +19,8 @@ const generateFlowTypeDeclarationBody = properties => {
     for (var _iterator = sortedProperties[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
       const column = _step.value;
 
-      propertyDeclarations.push('+' + column.name + ': ' + column.type);
+      const colon = column.nullable ? '?: ?' : ': ';
+      propertyDeclarations.push(column.name + colon + column.type);
     }
   } catch (err) {
     _didIteratorError = true;
