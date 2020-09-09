@@ -47,7 +47,7 @@ const builder = exports.builder = yargs => {
     },
     'type-name-formatter': {
       default: null,
-      description: 'Function used to format type name. Function is constructed using `new Function`. Function receives table name as the first parameter (parameter name is "tableName"). The default behaviour is to (upper) CamelCase the table name and suffix it with "RecordType".',
+      description: 'Function used to format type name. Function is constructed using `new Function`. Function receives table name as the first parameter (parameter name is "tableName"). The default behaviour is to (upper) CamelCase the table name and prefix it with "PSQL".',
       type: 'string'
     }
   });
@@ -56,7 +56,7 @@ const builder = exports.builder = yargs => {
 const handler = exports.handler = (() => {
   var _ref = _asyncToGenerator(function* (argv) {
     const defaultFormatTypeName = function defaultFormatTypeName(tableName) {
-      return (0, _lodash.upperFirst)((0, _lodash.camelCase)(tableName)) + 'RecordType';
+      return 'PSQL' + (0, _lodash.upperFirst)((0, _lodash.camelCase)(tableName));
     };
 
     const defaultFormatPropertyName = function defaultFormatPropertyName(columnName) {

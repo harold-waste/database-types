@@ -66,7 +66,7 @@ export const builder = (yargs: *): void => {
       },
       'type-name-formatter': {
         default: null,
-        description: 'Function used to format type name. Function is constructed using `new Function`. Function receives table name as the first parameter (parameter name is "tableName"). The default behaviour is to (upper) CamelCase the table name and suffix it with "RecordType".',
+        description: 'Function used to format type name. Function is constructed using `new Function`. Function receives table name as the first parameter (parameter name is "tableName"). The default behaviour is to (upper) CamelCase the table name and prefix it with "PSQL".',
         type: 'string'
       }
     });
@@ -77,7 +77,7 @@ type FormatterType = (name: string) => string;
 
 export const handler = async (argv: ConfigurationType): Promise<void> => {
   const defaultFormatTypeName = (tableName: string): string => {
-    return upperFirst(camelCase(tableName)) + 'RecordType';
+    return 'PSQL' + upperFirst(camelCase(tableName));
   };
 
   const defaultFormatPropertyName = (columnName: string): string => {

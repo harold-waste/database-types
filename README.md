@@ -30,14 +30,14 @@ database-types generate-types > ./types.js
 This generates file containing Flow type declarations in the following format:
 
 ```js
-export type ReservationSeatRecordType = {|
+export type PSQLReservationSeat = {|
   +createdAt: string,
   +id: number,
   +reservationId: number,
   +seatId: number
 |};
 
-export type TicketTypeRecordType = {|
+export type PSQLTicketType = {|
   +cinemaId: number,
   +id: number,
   +name: string,
