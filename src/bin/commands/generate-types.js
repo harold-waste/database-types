@@ -30,6 +30,7 @@ type ConfigurationType = {|
   +columnFilter: string,
   +databaseConnectionUri: string,
   +dialect: 'flow',
+  +schema: 'public',
   +includeMaterializedViews: boolean,
   +propertyNameFormatter: string | null,
   +typeNameFormatter: string | null
@@ -49,6 +50,9 @@ export const builder = (yargs: *): void => {
         choices: [
           'flow'
         ],
+        demand: true
+      },
+      schema: {
         demand: true
       },
       'include-materialized-views': {
@@ -111,7 +115,7 @@ export const handler = async (argv: ConfigurationType): Promise<void> => {
 
   let unnormalizedColumns;
 
-  unnormalizedColumns = await getDatabaseTableColumns(connection);
+  unnormalizedColumns = await getDatabaseTableColumns(connection, argv.schema);
 
   if (argv.includeMaterializedViews) {
     unnormalizedColumns = unnormalizedColumns.concat(await getDatabaseMaterializedViewColumns(connection));

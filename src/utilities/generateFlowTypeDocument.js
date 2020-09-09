@@ -33,9 +33,9 @@ export default (
     const typeProperties = groupedProperties[typeName];
 
     const typeDeclaration = `
-export type ${typeName} = {|
+declare type ${typeName} = {
   ${generateFlowTypeDeclarationBody(typeProperties).split('\n').join(',\n  ')}
-|};`;
+};`;
 
     typeDeclarations.push(typeDeclaration);
   }
