@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/factories/index.js"],"names":["default"],"mappings":";;;;;;;;;;;gDAEQA,O","file":"index.js","sourcesContent":["// @flow\n\nexport {default as createDebug} from './createDebug';\n"]}

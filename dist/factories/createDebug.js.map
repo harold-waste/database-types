@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/factories/createDebug.js"],"names":["namespace"],"mappings":";;;;;;AAEA;;;;;;kBAEgBA,SAAD,IAAuB;AACpC,SAAO,qBAAM,oBAAoBA,SAA1B,CAAP;AACD,C","file":"createDebug.js","sourcesContent":["// @flow\n\nimport debug from 'debug';\n\nexport default (namespace: string) => {\n  return debug('database-types:' + namespace);\n};\n"]}

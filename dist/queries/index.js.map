@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/queries/index.js"],"names":["default"],"mappings":";;;;;;;;;;;uEAEQA,O;;;;;;;;;4DACAA,O","file":"index.js","sourcesContent":["// @flow\n\nexport {default as getDatabaseMaterializedViewColumns} from './getDatabaseMaterializedViewColumns';\nexport {default as getDatabaseTableColumns} from './getDatabaseTableColumns';\n"]}
