@@ -11,7 +11,7 @@ const knownTypes = {
   integer: 'number',
   json: 'Object',
   text: 'string',
-  timestamp: 'string'
+  timestamp: 'Date'
 };
 
 test('correctly maps known types', (t) => {

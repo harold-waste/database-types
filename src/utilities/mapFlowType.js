@@ -7,11 +7,11 @@ import {
 const debug = createDebug('mapFlowType');
 
 export default (databaseTypeName: string): string => {
-  if (databaseTypeName === 'json') {
+  if (/^(?:json.*)(\s|$)/.test(databaseTypeName)) {
     return 'Object';
   }
 
-  if (/^(?:text|character|timestamp|coordinates)(\s|$)/.test(databaseTypeName)) {
+  if (/^(?:text|character|coordinates)(\s|$)/.test(databaseTypeName)) {
     return 'string';
   }
 
@@ -19,11 +19,18 @@ export default (databaseTypeName: string): string => {
     return 'boolean';
   }
 
-  if (databaseTypeName === 'bigint' || databaseTypeName === 'integer') {
+  if (/^(?:bigint|integer|real)(\s|$)/.test(databaseTypeName)) {
     return 'number';
   }
 
-  debug('unknown type', databaseTypeName);
+  if (/^(?:timestamp|date|time.*)(\s|$)/.test(databaseTypeName)) {
+    return 'Date';
+  }
 
+  if (/^(?:ARRAY)(\s|$)/.test(databaseTypeName)) {
+    return 'Array<string>';
+  }
+
+  debug('unknown type', databaseTypeName);
   return 'any';
 };
