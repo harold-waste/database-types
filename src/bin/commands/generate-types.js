@@ -4,7 +4,7 @@
 
 import {
   camelCase,
-  upperFirst
+  upperFirst,
 } from 'lodash';
 import {
   createConnection
@@ -88,9 +88,9 @@ export const handler = async (argv: ConfigurationType): Promise<void> => {
   const filterColumns: ColumnFilterType = (argv.columnFilter ? new Function('tableName', 'columnName', argv.columnFilter) : null: any);
 
   // eslint-disable-next-line no-extra-parens
-  const formatTypeName: FormatterType = (argv.typeNameFormatter ? new Function('columnName', argv.typeNameFormatter) : defaultFormatTypeName: any);
+  const formatTypeName: FormatterType = (argv.typeNameFormatter ? new Function('tableName', argv.typeNameFormatter) : defaultFormatTypeName: any);
   // eslint-disable-next-line no-extra-parens
-  const formatPropertyName: FormatterType = (argv.propertyNameFormatter ? new Function('tableName', argv.propertyNameFormatter) : defaultFormatPropertyName: any);
+  const formatPropertyName: FormatterType = (argv.propertyNameFormatter ? new Function('columnName', argv.propertyNameFormatter) : defaultFormatPropertyName: any);
 
   const createProperties = (columns: $ReadOnlyArray<ColumnType>): $ReadOnlyArray<TypePropertyType> => {
     let filteredColumns = columns;
@@ -106,7 +106,7 @@ export const handler = async (argv: ConfigurationType): Promise<void> => {
       return {
         name: formatPropertyName(column.columnName),
         nullable: column.nullable,
-        type: mapFlowType(column.databaseType),
+        type: mapFlowType(column.databaseType, column.constraintType, column.constraintDef),
         typeName: formatTypeName(column.tableName),
       };
     });

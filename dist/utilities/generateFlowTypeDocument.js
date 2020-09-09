@@ -45,7 +45,7 @@ exports.default = columns => {
 
   const typeDeclarations = [];
 
-  const typeNames = Object.keys(groupedProperties);
+  const typeNames = Object.keys(groupedProperties).sort();
 
   var _iteratorNormalCompletion2 = true;
   var _didIteratorError2 = false;

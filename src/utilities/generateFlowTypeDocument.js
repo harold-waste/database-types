@@ -2,7 +2,7 @@
 
 import {
   groupBy,
-  sortBy
+  sortBy,
 } from 'lodash';
 import type {
   TypePropertyType
@@ -28,7 +28,7 @@ export default (
 
   const typeDeclarations = [];
 
-  const typeNames = Object.keys(groupedProperties);
+  const typeNames = Object.keys(groupedProperties).sort();
 
   for (const typeName of typeNames) {
     const typeProperties = groupedProperties[typeName];

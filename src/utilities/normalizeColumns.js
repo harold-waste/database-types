@@ -11,6 +11,8 @@ export default (unnormalizedColumns: $ReadOnlyArray<UnnormalizedColumnType>): $R
 
     return {
       columnName: column.columnName,
+      constraintDef: column.constraintDef,
+      constraintType: column.constraintType,
       databaseType: column.dataType,
       nullable: valueIsNullable,
       tableName: column.tableName

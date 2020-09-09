@@ -1,12 +1,27 @@
 // @flow
 
+import _ from 'lodash';
 import {
   createDebug
 } from '../factories';
+import type {
+  ConstraintType,
+} from '../types';
 
 const debug = createDebug('mapFlowType');
 
-export default (databaseTypeName: string): string => {
+export default (databaseTypeName: string, constraintType: ?ConstraintType, constraintDef: ?string): string => {
+  if (constraintDef && constraintDef.includes('ARRAY')) {
+    const re = /'([\w]*)'+/g
+    const types = [];
+    let match = re.exec(constraintDef);
+    while (match != null) {
+      types.push(match[1]);
+      match = re.exec(constraintDef);
+    }
+    return `(${_.join(_.map(types, (item) =>`'${item}'`), ' | ')})`;
+  }
+
   if (/^(?:json.*)(\s|$)/.test(databaseTypeName)) {
     return 'Object';
   }
@@ -20,6 +35,7 @@ export default (databaseTypeName: string): string => {
   }
 
   if (/^(?:bigint|integer|real)(\s|$)/.test(databaseTypeName)) {
+    if ((constraintType === 'PRIMARY KEY' || constraintType === 'FOREIGN KEY')) return 'Id';
     return 'number';
   }
 

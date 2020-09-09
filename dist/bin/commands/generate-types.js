@@ -67,9 +67,9 @@ const handler = exports.handler = (() => {
     const filterColumns = argv.columnFilter ? new Function('tableName', 'columnName', argv.columnFilter) : null;
 
     // eslint-disable-next-line no-extra-parens
-    const formatTypeName = argv.typeNameFormatter ? new Function('columnName', argv.typeNameFormatter) : defaultFormatTypeName;
+    const formatTypeName = argv.typeNameFormatter ? new Function('tableName', argv.typeNameFormatter) : defaultFormatTypeName;
     // eslint-disable-next-line no-extra-parens
-    const formatPropertyName = argv.propertyNameFormatter ? new Function('tableName', argv.propertyNameFormatter) : defaultFormatPropertyName;
+    const formatPropertyName = argv.propertyNameFormatter ? new Function('columnName', argv.propertyNameFormatter) : defaultFormatPropertyName;
 
     const createProperties = function createProperties(columns) {
       let filteredColumns = columns;
@@ -85,7 +85,7 @@ const handler = exports.handler = (() => {
         return {
           name: formatPropertyName(column.columnName),
           nullable: column.nullable,
-          type: (0, _utilities.mapFlowType)(column.databaseType),
+          type: (0, _utilities.mapFlowType)(column.databaseType, column.constraintType, column.constraintDef),
           typeName: formatTypeName(column.tableName)
         };
       });
