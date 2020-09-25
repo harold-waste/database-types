@@ -1,31 +1,38 @@
-// @flow
+'use strict';
 
-import _ from 'lodash';
-import {
-  createDebug
-} from '../factories';
-import type {
-  ConstraintType,
-  ColumnType,
-} from '../types';
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-const debug = createDebug('mapFlowType');
+var _lodash = require('lodash');
 
-export default (column: ColumnType): string => {
-  const { constraintDef, columnName, databaseType, constraintType } = column;
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _factories = require('../factories');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const debug = (0, _factories.createDebug)('mapTypescriptType');
+
+exports.default = column => {
+  const constraintDef = column.constraintDef,
+        columnName = column.columnName,
+        databaseType = column.databaseType,
+        constraintType = column.constraintType;
   // Custom
+
   if (/.*Volume$/.test(columnName) || columnName === 'volume') return 'GQLVolumeEnum';
   if (/.*Currency$/.test(columnName) || columnName === 'currency') return 'GQLCurrencyEnum';
 
   if (constraintDef && constraintDef.includes('ARRAY')) {
-    const re = /'([\w]*)'+/g
+    const re = /'([\w]*)'+/g;
     const types = [];
     let match = re.exec(constraintDef);
     while (match != null) {
       types.push(match[1]);
       match = re.exec(constraintDef);
     }
-    return `(${_.join(_.map(types, (item) =>`'${item}'`), ' | ')})`;
+    return `(${_lodash2.default.join(_lodash2.default.map(types, item => `'${item}'`), ' | ')})`;
   }
 
   if (/^(?:json.*)(\s|$)/.test(databaseType)) {
@@ -41,7 +48,7 @@ export default (column: ColumnType): string => {
   }
 
   if (/^(?:bigint|integer|real)(\s|$)/.test(databaseType)) {
-    if ((constraintType === 'PRIMARY KEY' || constraintType === 'FOREIGN KEY')) return 'Id';
+    if (constraintType === 'PRIMARY KEY' || constraintType === 'FOREIGN KEY') return 'Id';
     return 'number';
   }
 
@@ -50,9 +57,10 @@ export default (column: ColumnType): string => {
   }
 
   if (/^(?:ARRAY)(\s|$)/.test(databaseType)) {
-    return 'Array<string>';
+    return 'string[]';
   }
 
   debug('unknown type', databaseType);
   return 'any';
 };
+//# sourceMappingURL=mapTypescriptType.js.map

@@ -9,7 +9,7 @@ import type {
   ColumnType,
 } from '../types';
 
-const debug = createDebug('mapFlowType');
+const debug = createDebug('mapTypescriptType');
 
 export default (column: ColumnType): string => {
   const { constraintDef, columnName, databaseType, constraintType } = column;
@@ -50,7 +50,7 @@ export default (column: ColumnType): string => {
   }
 
   if (/^(?:ARRAY)(\s|$)/.test(databaseType)) {
-    return 'Array<string>';
+    return 'string[]';
   }
 
   debug('unknown type', databaseType);

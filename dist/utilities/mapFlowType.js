@@ -14,7 +14,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const debug = (0, _factories.createDebug)('mapFlowType');
 
-exports.default = (databaseTypeName, constraintType, constraintDef) => {
+exports.default = column => {
+  const constraintDef = column.constraintDef,
+        columnName = column.columnName,
+        databaseType = column.databaseType,
+        constraintType = column.constraintType;
+  // Custom
+
+  if (/.*Volume$/.test(columnName) || columnName === 'volume') return 'GQLVolumeEnum';
+  if (/.*Currency$/.test(columnName) || columnName === 'currency') return 'GQLCurrencyEnum';
+
   if (constraintDef && constraintDef.includes('ARRAY')) {
     const re = /'([\w]*)'+/g;
     const types = [];
@@ -26,32 +35,32 @@ exports.default = (databaseTypeName, constraintType, constraintDef) => {
     return `(${_lodash2.default.join(_lodash2.default.map(types, item => `'${item}'`), ' | ')})`;
   }
 
-  if (/^(?:json.*)(\s|$)/.test(databaseTypeName)) {
+  if (/^(?:json.*)(\s|$)/.test(databaseType)) {
     return 'Object';
   }
 
-  if (/^(?:text|character|coordinates)(\s|$)/.test(databaseTypeName)) {
+  if (/^(?:text|character|coordinates)(\s|$)/.test(databaseType)) {
     return 'string';
   }
 
-  if (databaseTypeName === 'boolean') {
+  if (databaseType === 'boolean') {
     return 'boolean';
   }
 
-  if (/^(?:bigint|integer|real)(\s|$)/.test(databaseTypeName)) {
+  if (/^(?:bigint|integer|real)(\s|$)/.test(databaseType)) {
     if (constraintType === 'PRIMARY KEY' || constraintType === 'FOREIGN KEY') return 'Id';
     return 'number';
   }
 
-  if (/^(?:timestamp|date|time.*)(\s|$)/.test(databaseTypeName)) {
+  if (/^(?:timestamp|date|time.*)(\s|$)/.test(databaseType)) {
     return 'Date';
   }
 
-  if (/^(?:ARRAY)(\s|$)/.test(databaseTypeName)) {
+  if (/^(?:ARRAY)(\s|$)/.test(databaseType)) {
     return 'Array<string>';
   }
 
-  debug('unknown type', databaseTypeName);
+  debug('unknown type', databaseType);
   return 'any';
 };
 //# sourceMappingURL=mapFlowType.js.map

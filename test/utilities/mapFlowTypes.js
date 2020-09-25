@@ -15,15 +15,22 @@ const knownTypes = {
 };
 
 test('correctly maps known types', (t) => {
-  const databaseTypeNames = Object.keys(knownTypes);
+  const databaseTypes = Object.keys(knownTypes);
 
-  for (const databaseTypeName of databaseTypeNames) {
-    const flowType = knownTypes[databaseTypeName];
+  for (const databaseType of databaseTypes) {
+    const flowType = knownTypes[databaseType];
 
     if (typeof flowType !== 'string') {
       throw new TypeError();
     }
 
-    t.true(mapFlowType(databaseTypeName) === flowType, flowType);
+    t.true(mapFlowType({
+      columnName: 'test',
+      constraintDef: 'test',
+      constraintType: null,
+      databaseType,
+      nullable: false,
+      tableName: 'test',
+    }) === flowType, flowType);
   }
 });

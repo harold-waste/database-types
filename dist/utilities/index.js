@@ -13,12 +13,30 @@ Object.defineProperty(exports, 'generateFlowTypeDocument', {
   }
 });
 
+var _generateTypescriptTypeDocument = require('./generateTypescriptTypeDocument');
+
+Object.defineProperty(exports, 'generateTypescriptTypeDocument', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_generateTypescriptTypeDocument).default;
+  }
+});
+
 var _mapFlowType = require('./mapFlowType');
 
 Object.defineProperty(exports, 'mapFlowType', {
   enumerable: true,
   get: function get() {
     return _interopRequireDefault(_mapFlowType).default;
+  }
+});
+
+var _mapTypescriptType = require('./mapTypescriptType');
+
+Object.defineProperty(exports, 'mapTypescriptType', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_mapTypescriptType).default;
   }
 });
 

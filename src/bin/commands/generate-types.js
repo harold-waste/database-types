@@ -19,8 +19,10 @@ import {
 } from '../../queries';
 import {
   generateFlowTypeDocument,
+  generateTypescriptTypeDocument,
   mapFlowType,
-  normalizeColumns
+  mapTypescriptType,
+  normalizeColumns,
 } from '../../utilities';
 
 export const command = 'generate-types';
@@ -29,7 +31,7 @@ export const desc = 'Generate types for a Postgres database.';
 type ConfigurationType = {|
   +columnFilter: string,
   +databaseConnectionUri: string,
-  +dialect: 'flow',
+  +dialect: 'flow' | 'typescript',
   +schema: 'public',
   +includeMaterializedViews: boolean,
   +propertyNameFormatter: string | null,
@@ -48,7 +50,8 @@ export const builder = (yargs: *): void => {
       },
       dialect: {
         choices: [
-          'flow'
+          'flow',
+          'typescript'
         ],
         demand: true
       },
@@ -106,7 +109,7 @@ export const handler = async (argv: ConfigurationType): Promise<void> => {
       return {
         name: formatPropertyName(column.columnName),
         nullable: column.nullable,
-        type: mapFlowType(column.databaseType, column.constraintType, column.constraintDef),
+        type: argv.dialect === 'flow' ? mapFlowType(column) : mapTypescriptType(column),
         typeName: formatTypeName(column.tableName),
       };
     });
@@ -127,7 +130,9 @@ export const handler = async (argv: ConfigurationType): Promise<void> => {
   const properties = createProperties(normalizedColumns);
 
   // eslint-disable-next-line no-console
-  console.log(generateFlowTypeDocument(properties));
+  if (argv.dialect === 'flow') console.log(generateFlowTypeDocument(properties));
+  // eslint-disable-next-line no-console
+  if (argv.dialect === 'typescript') console.log(generateTypescriptTypeDocument(properties));
 
   await connection.end();
 };

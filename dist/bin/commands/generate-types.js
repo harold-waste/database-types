@@ -30,7 +30,7 @@ const builder = exports.builder = yargs => {
       demand: true
     },
     dialect: {
-      choices: ['flow'],
+      choices: ['flow', 'typescript'],
       demand: true
     },
     schema: {
@@ -85,7 +85,7 @@ const handler = exports.handler = (() => {
         return {
           name: formatPropertyName(column.columnName),
           nullable: column.nullable,
-          type: (0, _utilities.mapFlowType)(column.databaseType, column.constraintType, column.constraintDef),
+          type: argv.dialect === 'flow' ? (0, _utilities.mapFlowType)(column) : (0, _utilities.mapTypescriptType)(column),
           typeName: formatTypeName(column.tableName)
         };
       });
@@ -106,7 +106,9 @@ const handler = exports.handler = (() => {
     const properties = createProperties(normalizedColumns);
 
     // eslint-disable-next-line no-console
-    console.log((0, _utilities.generateFlowTypeDocument)(properties));
+    if (argv.dialect === 'flow') console.log((0, _utilities.generateFlowTypeDocument)(properties));
+    // eslint-disable-next-line no-console
+    if (argv.dialect === 'typescript') console.log((0, _utilities.generateTypescriptTypeDocument)(properties));
 
     yield connection.end();
   });
