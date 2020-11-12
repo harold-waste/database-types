@@ -34,7 +34,7 @@ export default (
     const typeProperties = groupedProperties[typeName];
 
     const typeDeclaration = `
-export type ${typeName} = {
+type ${typeName} = {
   ${generateTypescriptTypeDeclarationBody(typeProperties).split('\n').join(',\n  ')}
 };`;
 
