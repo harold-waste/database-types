@@ -15,7 +15,8 @@ const generateTypescriptTypeDeclarationBody = (properties: $ReadOnlyArray<TypePr
 
   for (const column of sortedProperties) {
     const nullable = column.nullable ? ' | null | undefined' : '';
-    propertyDeclarations.push(column.name + ': ' + column.type + nullable);
+    const colon = column.nullable ? '?: ' : ': ';
+    propertyDeclarations.push(column.name + colon + column.type + nullable);
   }
 
   return propertyDeclarations.join('\n');

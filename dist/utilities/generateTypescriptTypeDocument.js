@@ -20,7 +20,8 @@ const generateTypescriptTypeDeclarationBody = properties => {
       const column = _step.value;
 
       const nullable = column.nullable ? ' | null | undefined' : '';
-      propertyDeclarations.push(column.name + ': ' + column.type + nullable);
+      const colon = column.nullable ? '?: ' : ': ';
+      propertyDeclarations.push(column.name + colon + column.type + nullable);
     }
   } catch (err) {
     _didIteratorError = true;
