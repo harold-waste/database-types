@@ -24,6 +24,8 @@ exports.default = column => {
   if (/.*Volume$/.test(columnName) || columnName === 'volume') return 'GQLVolumeEnum';
   if (/.*Currency$/.test(columnName) || columnName === 'currency') return 'GQLCurrencyEnum';
 
+  const postfix = _lodash2.default.last(_lodash2.default.split(_lodash2.default.snakeCase(columnName), '_'));
+
   if (constraintDef && constraintDef.includes('ARRAY')) {
     const re = /'([\w]*)'+/g;
     const types = [];
@@ -48,7 +50,6 @@ exports.default = column => {
   }
 
   if (/^(?:bigint|integer|real|double)(\s|$)/.test(databaseType)) {
-    const postfix = _lodash2.default.last(_lodash2.default.split(_lodash2.default.snakeCase(columnName), '_'));
     if (postfix === 'id' || postfix === 'ids') return 'Id';
     if (constraintType === 'PRIMARY KEY' || constraintType === 'FOREIGN KEY') return 'Id';
     return 'number';
@@ -59,6 +60,7 @@ exports.default = column => {
   }
 
   if (/^(?:ARRAY)(\s|$)/.test(databaseType)) {
+    if (postfix === 'id' || postfix === 'ids') return 'Id[]';
     return 'string[]';
   }
 
