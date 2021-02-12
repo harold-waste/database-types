@@ -20,8 +20,10 @@ import {
 import {
   generateFlowTypeDocument,
   generateTypescriptTypeDocument,
+  generateClassTableTypeDocument,
   mapFlowType,
   mapTypescriptType,
+  mapClassTableType,
   normalizeColumns,
 } from '../../utilities';
 
@@ -31,7 +33,7 @@ export const desc = 'Generate types for a Postgres database.';
 type ConfigurationType = {|
   +columnFilter: string,
   +databaseConnectionUri: string,
-  +dialect: 'flow' | 'typescript',
+  +dialect: 'flow' | 'typescript' | 'class/table',
   +schema: 'public',
   +includeMaterializedViews: boolean,
   +propertyNameFormatter: string | null,
@@ -51,7 +53,8 @@ export const builder = (yargs: *): void => {
       dialect: {
         choices: [
           'flow',
-          'typescript'
+          'typescript',
+          'class/table',
         ],
         demand: true
       },
@@ -76,7 +79,7 @@ export const builder = (yargs: *): void => {
 };
 
 type ColumnFilterType = (tableName: string, columnName: string) => boolean;
-type FormatterType = (name: string) => string;
+type FormatterType = (name: string, upperFirst: Function) => string;
 
 export const handler = async (argv: ConfigurationType): Promise<void> => {
   const defaultFormatTypeName = (tableName: string): string => {
@@ -91,7 +94,7 @@ export const handler = async (argv: ConfigurationType): Promise<void> => {
   const filterColumns: ColumnFilterType = (argv.columnFilter ? new Function('tableName', 'columnName', argv.columnFilter) : null: any);
 
   // eslint-disable-next-line no-extra-parens
-  const formatTypeName: FormatterType = (argv.typeNameFormatter ? new Function('tableName', argv.typeNameFormatter) : defaultFormatTypeName: any);
+  const formatTypeName: FormatterType = (argv.typeNameFormatter ? new Function('tableName', 'upperFirst', argv.typeNameFormatter) : defaultFormatTypeName: any);
   // eslint-disable-next-line no-extra-parens
   const formatPropertyName: FormatterType = (argv.propertyNameFormatter ? new Function('columnName', argv.propertyNameFormatter) : defaultFormatPropertyName: any);
 
@@ -109,8 +112,15 @@ export const handler = async (argv: ConfigurationType): Promise<void> => {
       return {
         name: formatPropertyName(column.columnName),
         nullable: column.nullable,
-        type: argv.dialect === 'flow' ? mapFlowType(column) : mapTypescriptType(column),
-        typeName: formatTypeName(column.tableName),
+        type: {
+          flow: mapFlowType(column),
+          typescript: mapTypescriptType(column),
+          'class/table': mapClassTableType(column),
+        }[argv.dialect],
+        typeName: formatTypeName(column.tableName, upperFirst),
+        constraintType: column.constraintType,
+        constraintDef: column.constraintDef,
+        tableName: column.tableName,
       };
     });
   };
@@ -133,6 +143,7 @@ export const handler = async (argv: ConfigurationType): Promise<void> => {
   if (argv.dialect === 'flow') console.log(generateFlowTypeDocument(properties));
   // eslint-disable-next-line no-console
   if (argv.dialect === 'typescript') console.log(generateTypescriptTypeDocument(properties));
-
+  // eslint-disable-next-line no-console
+  if (argv.dialect === 'class/table') console.log(generateClassTableTypeDocument(properties));
   await connection.end();
 };

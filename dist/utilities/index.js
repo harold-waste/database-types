@@ -22,6 +22,15 @@ Object.defineProperty(exports, 'generateTypescriptTypeDocument', {
   }
 });
 
+var _generateClassTableTypeDocument = require('./generateClassTableTypeDocument');
+
+Object.defineProperty(exports, 'generateClassTableTypeDocument', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_generateClassTableTypeDocument).default;
+  }
+});
+
 var _mapFlowType = require('./mapFlowType');
 
 Object.defineProperty(exports, 'mapFlowType', {
@@ -37,6 +46,15 @@ Object.defineProperty(exports, 'mapTypescriptType', {
   enumerable: true,
   get: function get() {
     return _interopRequireDefault(_mapTypescriptType).default;
+  }
+});
+
+var _mapClassTableType = require('./mapClassTableType');
+
+Object.defineProperty(exports, 'mapClassTableType', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_mapClassTableType).default;
   }
 });
 

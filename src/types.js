@@ -25,8 +25,11 @@ export type ColumnType = {|
 |};
 
 export type TypePropertyType = {|
+  +constraintDef: ?string,
+  +constraintType: ?ConstraintType,
   +name: string,
   +nullable: boolean,
   +type: string,
   +typeName: string,
+  +tableName: string,
 |};

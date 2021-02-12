@@ -30,7 +30,7 @@ const builder = exports.builder = yargs => {
       demand: true
     },
     dialect: {
-      choices: ['flow', 'typescript'],
+      choices: ['flow', 'typescript', 'class/table'],
       demand: true
     },
     schema: {
@@ -67,7 +67,7 @@ const handler = exports.handler = (() => {
     const filterColumns = argv.columnFilter ? new Function('tableName', 'columnName', argv.columnFilter) : null;
 
     // eslint-disable-next-line no-extra-parens
-    const formatTypeName = argv.typeNameFormatter ? new Function('tableName', argv.typeNameFormatter) : defaultFormatTypeName;
+    const formatTypeName = argv.typeNameFormatter ? new Function('tableName', 'upperFirst', argv.typeNameFormatter) : defaultFormatTypeName;
     // eslint-disable-next-line no-extra-parens
     const formatPropertyName = argv.propertyNameFormatter ? new Function('columnName', argv.propertyNameFormatter) : defaultFormatPropertyName;
 
@@ -85,8 +85,15 @@ const handler = exports.handler = (() => {
         return {
           name: formatPropertyName(column.columnName),
           nullable: column.nullable,
-          type: argv.dialect === 'flow' ? (0, _utilities.mapFlowType)(column) : (0, _utilities.mapTypescriptType)(column),
-          typeName: formatTypeName(column.tableName)
+          type: {
+            flow: (0, _utilities.mapFlowType)(column),
+            typescript: (0, _utilities.mapTypescriptType)(column),
+            'class/table': (0, _utilities.mapClassTableType)(column)
+          }[argv.dialect],
+          typeName: formatTypeName(column.tableName, _lodash.upperFirst),
+          constraintType: column.constraintType,
+          constraintDef: column.constraintDef,
+          tableName: column.tableName
         };
       });
     };
@@ -109,7 +116,8 @@ const handler = exports.handler = (() => {
     if (argv.dialect === 'flow') console.log((0, _utilities.generateFlowTypeDocument)(properties));
     // eslint-disable-next-line no-console
     if (argv.dialect === 'typescript') console.log((0, _utilities.generateTypescriptTypeDocument)(properties));
-
+    // eslint-disable-next-line no-console
+    if (argv.dialect === 'class/table') console.log((0, _utilities.generateClassTableTypeDocument)(properties));
     yield connection.end();
   });
 
