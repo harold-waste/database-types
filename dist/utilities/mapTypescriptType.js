@@ -47,7 +47,9 @@ exports.default = column => {
     return 'boolean';
   }
 
-  if (/^(?:bigint|integer|real)(\s|$)/.test(databaseType)) {
+  if (/^(?:bigint|integer|real|double)(\s|$)/.test(databaseType)) {
+    const postfix = _lodash2.default.last(_lodash2.default.split(_lodash2.default.snakeCase(columnName), '_'));
+    if (postfix === 'id' || postfix === 'ids') return 'Id';
     if (constraintType === 'PRIMARY KEY' || constraintType === 'FOREIGN KEY') return 'Id';
     return 'number';
   }

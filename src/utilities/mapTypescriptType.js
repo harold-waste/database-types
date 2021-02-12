@@ -40,7 +40,9 @@ export default (column: ColumnType): string => {
     return 'boolean';
   }
 
-  if (/^(?:bigint|integer|real)(\s|$)/.test(databaseType)) {
+  if (/^(?:bigint|integer|real|double)(\s|$)/.test(databaseType)) {
+    const postfix = _.last(_.split(_.snakeCase(columnName), '_'));
+    if (postfix === 'id' || postfix === 'ids') return 'Id';
     if ((constraintType === 'PRIMARY KEY' || constraintType === 'FOREIGN KEY')) return 'Id';
     return 'number';
   }

@@ -66,8 +66,8 @@
     "build": "rm -fr ./dist && NODE_ENV=production babel ./src --out-dir ./dist --copy-files --source-maps",
     "lint": "eslint ./src ./test && flow",
     "test": "ava --verbose",
-    "test:flow": "yarn build && node dist/bin/index.js generate-types --dialect=flow --schema=geminirubber --propertyNameFormatter='return columnName' --database-connection-uri=postgres://haroldwaste:haroldwaste@127.0.0.1/haroldwaste > ./sample/type/flow/PSQLTypes.js",
-    "test:typescript": "yarn build && node dist/bin/index.js generate-types --dialect=typescript --schema=geminirubber --propertyNameFormatter='return columnName' --database-connection-uri=postgres://haroldwaste:haroldwaste@127.0.0.1/haroldwaste > ./sample/type/typescript/PSQLTypes.d.ts"
+    "test:flow": "yarn build && node dist/bin/index.js generate-types --dialect=flow --schema=geminirubber --propertyNameFormatter='return columnName' --database-connection-uri=postgres://haroldwaste:haroldwaste@127.0.0.1/haroldwaste > PSQLTypesFlor.js",
+    "test:typescript": "yarn build && node dist/bin/index.js generate-types --dialect=typescript --schema=geminirubber --propertyNameFormatter='return columnName' --database-connection-uri=postgres://haroldwaste:haroldwaste@127.0.0.1/haroldwaste > PSQLTypescript.d.ts"
   },
   "version": "1.0.2"
 }
