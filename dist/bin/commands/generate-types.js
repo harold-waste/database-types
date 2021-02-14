@@ -7,11 +7,15 @@ exports.handler = exports.builder = exports.desc = exports.command = undefined;
 
 var _lodash = require('lodash');
 
+var _lodash2 = _interopRequireDefault(_lodash);
+
 var _mightyql = require('mightyql');
 
 var _queries = require('../../queries');
 
 var _utilities = require('../../utilities');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
@@ -60,14 +64,14 @@ const handler = exports.handler = (() => {
     };
 
     const defaultFormatPropertyName = function defaultFormatPropertyName(columnName) {
-      return (0, _lodash.camelCase)(columnName);
+      return columnName;
     };
 
     // eslint-disable-next-line no-extra-parens
     const filterColumns = argv.columnFilter ? new Function('tableName', 'columnName', argv.columnFilter) : null;
 
     // eslint-disable-next-line no-extra-parens
-    const formatTypeName = argv.typeNameFormatter ? new Function('tableName', 'upperFirst', argv.typeNameFormatter) : defaultFormatTypeName;
+    const formatTypeName = argv.typeNameFormatter ? new Function('tableName', '_', argv.typeNameFormatter) : defaultFormatTypeName;
     // eslint-disable-next-line no-extra-parens
     const formatPropertyName = argv.propertyNameFormatter ? new Function('columnName', argv.propertyNameFormatter) : defaultFormatPropertyName;
 
@@ -90,10 +94,13 @@ const handler = exports.handler = (() => {
             typescript: (0, _utilities.mapTypescriptType)(column),
             'class/table': (0, _utilities.mapClassTableType)(column)
           }[argv.dialect],
-          typeName: formatTypeName(column.tableName, _lodash.upperFirst),
+          typeName: formatTypeName(column.tableName, _lodash2.default),
           constraintType: column.constraintType,
           constraintDef: column.constraintDef,
-          tableName: column.tableName
+          tableName: column.tableName,
+          refTableName: column.refTableName,
+          refTableColumn: column.refTableColumn,
+          formatTypeName
         };
       });
     };

@@ -15,7 +15,9 @@ export default (unnormalizedColumns: $ReadOnlyArray<UnnormalizedColumnType>): $R
       constraintType: column.constraintType,
       databaseType: column.dataType,
       nullable: valueIsNullable,
-      tableName: column.tableName
+      refTableColumn: column.refTableColumn,
+      refTableName: column.refTableName,
+      tableName: column.tableName,
     };
   });
 

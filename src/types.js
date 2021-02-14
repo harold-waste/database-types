@@ -12,6 +12,8 @@ export type UnnormalizedColumnType = {|
   +constraintType: ?ConstraintType,
   +dataType: string,
   +isNullable: 'YES' | 'NO',
+  +refTableColumn: ?string,
+  +refTableName: ?string,
   +tableName: string,
 |};
 
@@ -21,15 +23,20 @@ export type ColumnType = {|
   +constraintType: ?ConstraintType,
   +databaseType: string,
   +nullable: boolean,
+  +refTableColumn: ?string,
+  +refTableName: ?string,
   +tableName: string,
 |};
 
 export type TypePropertyType = {|
   +constraintDef: ?string,
   +constraintType: ?ConstraintType,
+  +formatTypeName: Function,
   +name: string,
   +nullable: boolean,
+  +refTableColumn: ?string,
+  +refTableName: ?string,
+  +tableName: string,
   +type: string,
   +typeName: string,
-  +tableName: string,
 |};

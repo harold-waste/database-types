@@ -2,7 +2,7 @@
 
 /* eslint-disable no-new-func */
 
-import {
+import _, {
   camelCase,
   upperFirst,
 } from 'lodash';
@@ -87,14 +87,14 @@ export const handler = async (argv: ConfigurationType): Promise<void> => {
   };
 
   const defaultFormatPropertyName = (columnName: string): string => {
-    return camelCase(columnName);
+    return columnName;
   };
 
   // eslint-disable-next-line no-extra-parens
   const filterColumns: ColumnFilterType = (argv.columnFilter ? new Function('tableName', 'columnName', argv.columnFilter) : null: any);
 
   // eslint-disable-next-line no-extra-parens
-  const formatTypeName: FormatterType = (argv.typeNameFormatter ? new Function('tableName', 'upperFirst', argv.typeNameFormatter) : defaultFormatTypeName: any);
+  const formatTypeName: FormatterType = (argv.typeNameFormatter ? new Function('tableName', '_', argv.typeNameFormatter) : defaultFormatTypeName: any);
   // eslint-disable-next-line no-extra-parens
   const formatPropertyName: FormatterType = (argv.propertyNameFormatter ? new Function('columnName', argv.propertyNameFormatter) : defaultFormatPropertyName: any);
 
@@ -117,10 +117,13 @@ export const handler = async (argv: ConfigurationType): Promise<void> => {
           typescript: mapTypescriptType(column),
           'class/table': mapClassTableType(column),
         }[argv.dialect],
-        typeName: formatTypeName(column.tableName, upperFirst),
+        typeName: formatTypeName(column.tableName, _),
         constraintType: column.constraintType,
         constraintDef: column.constraintDef,
         tableName: column.tableName,
+        refTableName: column.refTableName,
+        refTableColumn: column.refTableColumn,
+        formatTypeName,
       };
     });
   };

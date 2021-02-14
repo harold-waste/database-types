@@ -14,6 +14,8 @@ exports.default = unnormalizedColumns => {
       constraintType: column.constraintType,
       databaseType: column.dataType,
       nullable: valueIsNullable,
+      refTableColumn: column.refTableColumn,
+      refTableName: column.refTableName,
       tableName: column.tableName
     };
   });

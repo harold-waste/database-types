@@ -6,6 +6,12 @@ Object.defineProperty(exports, "__esModule", {
 
 var _lodash = require('lodash');
 
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _generateTypes = require('../bin/commands/generate-types');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 const generateClassTableTypeDeclarationBody = properties => {
   const sortedProperties = (0, _lodash.sortBy)(properties, 'name');
 
@@ -21,9 +27,16 @@ const generateClassTableTypeDeclarationBody = properties => {
 
       const nullable = column.nullable ? ' | null | undefined' : '';
       const colon = column.nullable ? '?: ' : ': ';
-      const primary = column.constraintType === 'PRIMARY KEY' ? '{ primary: true }' : '';
-      propertyDeclarations.push('\t@Column(' + primary + ')');
-      propertyDeclarations.push('\tpublic ' + column.name + colon + column.type + nullable + ';');
+      if (column.constraintType === 'FOREIGN KEY') {
+        propertyDeclarations.push(`\t@Column({ name: '${column.name}' })`);
+        propertyDeclarations.push('\tpublic joined' + _lodash2.default.upperFirst(_lodash2.default.replace(_lodash2.default.replace(column.name, 'Ids', ''), 'Id', '')) + colon + column.formatTypeName(column.refTableName, _lodash2.default) + nullable + ';');
+        propertyDeclarations.push('\t@Column()');
+        propertyDeclarations.push('\tpublic ' + column.name + colon + column.type + nullable + ';');
+      } else {
+        const primary = column.constraintType === 'PRIMARY KEY' ? '{ primary: true }' : '';
+        propertyDeclarations.push('\t@Column(' + primary + ')');
+        propertyDeclarations.push('\tpublic ' + column.name + colon + column.type + nullable + ';');
+      }
     }
   } catch (err) {
     _didIteratorError = true;
