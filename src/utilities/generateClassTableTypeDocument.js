@@ -13,7 +13,6 @@ const generateClassTableTypeDeclarationBody = (properties: $ReadOnlyArray<TypePr
   const sortedProperties = sortBy(properties, 'name');
 
   const propertyDeclarations = [];
-
   for (const column of sortedProperties) {
     const nullable = column.nullable ? ' | null | undefined' : '';
     const colon = column.nullable ? '?: ' : ': ';
@@ -21,7 +20,7 @@ const generateClassTableTypeDeclarationBody = (properties: $ReadOnlyArray<TypePr
       propertyDeclarations.push(`\t@Column({ name: '${column.name}' })`);
       propertyDeclarations.push('\tpublic joined'
         + _.upperFirst(_.replace(_.replace(column.name, 'Ids', ''), 'Id', ''))
-        + colon + column.formatTypeName(column.refTableName, _) + nullable + ';');
+        + ':' + column.formatTypeName(column.refTableName, _) + ';');
       propertyDeclarations.push('\t@Column()');
       propertyDeclarations.push('\tpublic ' + column.name + colon + column.type + nullable + ';');
     } else {

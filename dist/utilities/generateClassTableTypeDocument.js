@@ -16,7 +16,6 @@ const generateClassTableTypeDeclarationBody = properties => {
   const sortedProperties = (0, _lodash.sortBy)(properties, 'name');
 
   const propertyDeclarations = [];
-
   var _iteratorNormalCompletion = true;
   var _didIteratorError = false;
   var _iteratorError = undefined;
@@ -29,7 +28,7 @@ const generateClassTableTypeDeclarationBody = properties => {
       const colon = column.nullable ? '?: ' : ': ';
       if (column.constraintType === 'FOREIGN KEY') {
         propertyDeclarations.push(`\t@Column({ name: '${column.name}' })`);
-        propertyDeclarations.push('\tpublic joined' + _lodash2.default.upperFirst(_lodash2.default.replace(_lodash2.default.replace(column.name, 'Ids', ''), 'Id', '')) + colon + column.formatTypeName(column.refTableName, _lodash2.default) + nullable + ';');
+        propertyDeclarations.push('\tpublic joined' + _lodash2.default.upperFirst(_lodash2.default.replace(_lodash2.default.replace(column.name, 'Ids', ''), 'Id', '')) + ':' + column.formatTypeName(column.refTableName, _lodash2.default) + ';');
         propertyDeclarations.push('\t@Column()');
         propertyDeclarations.push('\tpublic ' + column.name + colon + column.type + nullable + ';');
       } else {
